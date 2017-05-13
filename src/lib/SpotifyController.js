@@ -1,55 +1,82 @@
+/* @flow */
+
 const SpotifyWebApi = require('spotify-web-api-node');
 
 const api = new SpotifyWebApi({
   clientId: process.env.CLIENT_ID,
-  clientSecret: process.env.CLIENT_SECRET
+  clientSecret: process.env.CLIENT_SECRET,
 });
 
 class SpotifyController {
+
+  // Props
+  api: SpotifyWebApi
+
+  // Methods
   constructor() {
     this.api = api;
   }
 
-  search(param, keyword) {
-    switch(param) {
+  /**
+   * Search wrapper method. According to the parameter passed to the command,
+   * searchs the Spotify API and formats the message.
+   *
+   * @method search
+   * @param  {string} param   The type of query to be done
+   * @param  {string} keyword The query term
+   * @return {Promise}        The formatted message
+   */
+  search(param: string, keyword: string): Promise<any> {
+    const limit: number = 5;
+    switch (param) {
       case 'song':
-        return this._searchTrack(keyword);
-        break;
+        return this._searchTrack(keyword, limit);
       case 'artist':
-        return this._searchArtist(keyword);
-        break;
+        return this._searchArtist(keyword, limit);
       case 'album':
-        return this._searchAlbum(keyword)
-        break;
+        return this._searchAlbum(keyword, limit);
     }
+    return this._unknownParams();
   }
 
-  _searchTrack(keyword) {
-    return api.searchTracks(keyword, {limit: 5});
+/**
+ * Search the API by track name
+ * @method _searchTrack
+ * @param  {string}     keyword The query term
+ * @param  {number}     The number of results to return
+ * @return {Promise}    A formatted message with tracks info
+ */
+  _searchTrack(keyword: string, limit: number) {
+    return api.searchTracks(keyword, {limit: limit});
   }
 
-  _searchArtist(keyword) {
-    return api.searchArtists(keyword, {limit: 5})
+/**
+ * Search the API by artist name
+ * @method _searchArtist
+ * @param  {string}     keyword The query term
+ * @param  {number}     The number of results to return
+ * @return {Promise}    A formatted message with artists info
+ */
+  _searchArtist(keyword: string, limit: number) {
+    return api.searchArtists(keyword, {limit: limit})
     .then(data => {
       const { items } = data.body.artists;
-      
-      const response = {
-        text: 'Okay, this is what I found:'
-      };
-      const attachments = items.map(
+      const response = { };
+
+      const attachments: [any] = items.map(
           item => {
             const image = (item.images[0]) ? item.images[0].url : null;
 
             return {
               title: item.name,
               thumb_url: image,
-              callback_id: 'someid',
+              callback_id: 'artist',
               fields: [
                 {
                   title: 'Followers',
                   value: item.followers.total,
-                  short: true 
-                }
+                  short: true,
+                },
               ],
               attachment_type: 'default',
               actions: [
@@ -59,21 +86,44 @@ class SpotifyController {
                   type: 'button',
                   value: JSON.stringify({
                     title: item.name,
-                    thumb_url: image
-                  })
-                }
-              ]
+                    thumb_url: image,
+                  }),
+                },
+              ],
             };
           });
+
+      response.text = (attachments.length > 0) ?
+        'Okay, this is what I found:' :
+        'I\'m sorry, I didn\'t find anything. ☹️';
       response.attachments = attachments;
 
-      console.log(JSON.stringify(response, null, 2)); 
       return response;
     });
   }
 
-  _searchAlbum(keyword) {
-    return api.searchAlbums(keyword, {limit: 5});
+/**
+ * Search the API by album name
+ * @method _searchAlbum
+ * @param  {string}     keyword The query term
+ * @param  {number}     The number of results to return
+ * @return {Promise}    A formatted message with albums info
+ */
+  _searchAlbum(keyword: string, limit: number) {
+    return api.searchAlbums(keyword, {limit: limit});
+  }
+
+/**
+ * Default case where no valid command is issued
+ * @method _unknownParams
+ * @return {Promise}    A no valid command message
+ */
+  _unknownParams() {
+    return new Promise((resolve, reject) => {
+      resolve({
+        text: 'Oops, please enter a valid command'
+      });
+    });
   }
 
 }

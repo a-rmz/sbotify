@@ -5,17 +5,28 @@
   "main": "src/app.js",
   "scripts": {
     "start": "node src/app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "flow check",
+    "build": "flow-remove-types src/ -d build/",
+    "watch": "nodemon ./build/app.js"
   },
-  "author": "",
+  "author": "Alejandro Ramirez <alex.ramirez@wizeline.com>",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.17.1",
     "express": "^4.15.2",
     "request": "^2.81.0",
-    "request-promise": "^4.2.0",
-    "spotify-web-api-node": "^2.3.6"
+    "request-promise": "^4.2.1",
+    "spotify-web-api-node": "^2.4.0"
   },
+  "repository": "git@github.com:a-rmz/sbotify.git",
   "devDependencies": {
-    "dotenv": "^4.0.0"
+    "babel-eslint": "^7.2.3",
+    "dotenv": "^4.0.0",
+    "eslint": "^3.19.0",
+    "eslint-config-fbjs": "^1.1.1",
+    "eslint-plugin-babel": "^4.1.1",
+    "eslint-plugin-flowtype": "^2.32.1",
+    "eslint-plugin-react": "^7.0.0",
+    "flow-remove-types": "^1.2.1"
   }
 }

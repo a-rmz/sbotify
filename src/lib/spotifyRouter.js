@@ -1,21 +1,22 @@
+/* @flow */
 
-const rp = require('request-promise');
 const router = require('express').Router();
 const SpotifyController = require('./SpotifyController');
 const controller = new SpotifyController();
 
 const validParams = ['song', 'artist'];
 
+/**
+ * Middleware layer that verifies that both parameter and keyword
+ * are present in the command
+ */
 router.post('/', (req, res, next) => {
   const { body } = req;
-  const { text, channel_id, user_id } = body;
-  console.log(JSON.stringify(body, null, 2));
-  console.log(channel_id);
+  const { text } = body;
 
   const [param, keyword] = text.split(' ');
-  console.log(param, keyword);
   if (validParams.indexOf(param) === -1 || keyword.length <= 0) {
-    res.status(200).send('Please enter a valid command!'); 
+    res.status(200).send('Please enter a valid command!');
     return;
   }
 
@@ -24,13 +25,19 @@ router.post('/', (req, res, next) => {
   next();
 });
 
+/**
+ * Main router endpoint.
+ * Makes the call to the controller and returns the message
+ */
 router.post('/', (req, res) => {
-  controller.search(req.param, req.keyword)
+  const param: string = req.param;
+  const keyword: string = req.keyword;
+
+  controller.search(param, keyword)
     .then(response => {
       res.status(200).send(response);
     });
+
 });
-
-
 
 module.exports = router;
