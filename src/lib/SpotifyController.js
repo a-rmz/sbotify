@@ -60,7 +60,6 @@ class SpotifyController {
   _searchArtist(keyword: string, limit: number) {
     return api.searchArtists(keyword, {limit: limit})
     .then(data => {
-      console.log(JSON.stringify(data, null, 2));
       const { items } = data.body.artists;
       const response = { };
 
