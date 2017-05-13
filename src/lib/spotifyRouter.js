@@ -14,7 +14,13 @@ router.post('/', (req, res, next) => {
   const { body } = req;
   const { text } = body;
 
-  const [param, keyword] = text.split(' ');
+  const tokens: [string] = text.split(' ');
+  const param: string = tokens[0];
+  const keyword: string = tokens.slice(1).join(' ');
+
+  console.log(param);
+  console.log(keyword);
+
   if (validParams.indexOf(param) === -1 || keyword.length <= 0) {
     res.status(200).send('Please enter a valid command!');
     return;
