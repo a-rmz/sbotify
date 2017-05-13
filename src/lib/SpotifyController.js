@@ -196,7 +196,61 @@ class SpotifyController {
  * @return {Promise}    A formatted message with albums info
  */
   _searchAlbum(keyword: string, limit: number) {
-    return api.searchAlbums(keyword, {limit: limit});
+    return api.searchAlbums(keyword, {limit: limit})
+    .then(data => {
+      const { items } = data.body.albums;
+      const response = { };
+
+      const attachments: [any] = items.map(
+          item => {
+            const image = (item.images[0]) ? item.images[0].url : null;
+            const artists = item.artists.map(artist => artist.name).join(', ');
+
+            const callback_text = `Check this out:\n${item.external_urls.spotify}`;
+
+            return {
+              title: item.name,
+              thumb_url: image,
+              callback_id: 'track',
+              fields: [
+                {
+                  title: 'Artist(s)',
+                  value: artists,
+                  short: true,
+                }
+              ],
+              attachment_type: 'default',
+              actions: [
+                {
+                  name: 'share',
+                  text: 'Share!',
+                  type: 'button',
+                  value: JSON.stringify({
+                    text: callback_text,
+                    attachment: {
+                      title: item.name,
+                      thumb_url: image,
+                      fields: [
+                        {
+                          title: 'Artist(s)',
+                          value: artists,
+                          short: true,
+                        }
+                      ],
+                    }
+                  }),
+                },
+              ],
+            };
+          });
+
+      response.text = (attachments.length > 0) ?
+        'Okay, this is what I found:' :
+        'I\'m sorry, I didn\'t find anything. ☹️';
+      response.attachments = attachments;
+
+      return response;
+    });
   }
 
 /**
