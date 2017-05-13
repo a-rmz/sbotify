@@ -4,7 +4,7 @@ const router = require('express').Router();
 const SpotifyController = require('./SpotifyController');
 const controller = new SpotifyController();
 
-const validParams = ['song', 'artist'];
+const validParams = ['song', 'artist', 'album'];
 
 /**
  * Middleware layer that verifies that both parameter and keyword
