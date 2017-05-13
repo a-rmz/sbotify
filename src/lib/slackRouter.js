@@ -12,10 +12,10 @@ router.use('/incoming', spotifyRouter);
  */
 router.post('/postback', (req, res) => {
   res.sendStatus(200);
-  
+
   const { body } = req;
   const payload = JSON.parse(body.payload);
-  const attachment = JSON.parse(payload.actions[0].value);
+  const { attachment, text } = JSON.parse(payload.actions[0].value);
   const attachments = [attachment];
 
   rp({
@@ -24,7 +24,7 @@ router.post('/postback', (req, res) => {
     qs: {
       token: process.env.SLACK_BOT_TOKEN,
       channel: payload.channel.id,
-      text: 'Here\'s something for you!',
+      text: text,
       attachments: JSON.stringify(attachments)
     }
   })

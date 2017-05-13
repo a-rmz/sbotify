@@ -60,12 +60,19 @@ class SpotifyController {
   _searchArtist(keyword: string, limit: number) {
     return api.searchArtists(keyword, {limit: limit})
     .then(data => {
+      console.log(JSON.stringify(data, null, 2));
       const { items } = data.body.artists;
       const response = { };
 
       const attachments: [any] = items.map(
           item => {
             const image = (item.images[0]) ? item.images[0].url : null;
+            let genres = (item.genres.length > 5) ?
+              item.genres.slice(0, 5).join(', ') :
+              item.genres.join(', ');
+            // Capitalize the first letter
+            genres = genres.charAt(0).toUpperCase() + genres.slice(1);
+            const callback_text = `Check this out:\n${item.external_urls.spotify}`;
 
             return {
               title: item.name,
@@ -85,8 +92,23 @@ class SpotifyController {
                   text: 'Share!',
                   type: 'button',
                   value: JSON.stringify({
-                    title: item.name,
-                    thumb_url: image,
+                    text: callback_text,
+                    attachment: {
+                      title: item.name,
+                      thumb_url: image,
+                      fields: [
+                        {
+                          title: 'Genres',
+                          value: genres,
+                          short: true,
+                        },
+                        {
+                          title: 'Followers',
+                          value: item.followers.total,
+                          short: true,
+                        },
+                      ],
+                    }
                   }),
                 },
               ],
