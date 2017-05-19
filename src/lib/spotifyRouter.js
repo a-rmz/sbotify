@@ -7,8 +7,19 @@ const controller = new SpotifyController();
 const validParams = ['song', 'artist', 'album'];
 
 /**
+ * Ensure the token is valid
+ * @type {void}
+ */
+router.post('/', (req, res, next) => {
+  if (req.body.token == process.env.SLACK_VERIFY_TOKEN) {
+    next();
+  }
+});
+
+/**
  * Middleware layer that verifies that both parameter and keyword
  * are present in the command
+ * @type {void}
  */
 router.post('/', (req, res, next) => {
   const { body } = req;
@@ -34,6 +45,7 @@ router.post('/', (req, res, next) => {
 /**
  * Main router endpoint.
  * Makes the call to the controller and returns the message
+ * @type {void}
  */
 router.post('/', (req, res) => {
   const param: string = req.param;
