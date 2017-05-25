@@ -2,10 +2,9 @@
 
 require('dotenv').load();
 
-const rp = require('request-promise');
 const express = require('express');
 const bodyParser = require('body-parser');
-const slackRouter = require('./lib/slackRouter');
+const routes = require('./routes');
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -16,7 +15,7 @@ app.use('/', (req, res, next) => {
   next();
 });
 
-app.use('/', slackRouter);
+app.use('/', routes);
 
 app.listen(process.env.PORT || 4500, () => {
   console.log(`Sbotify server running in port ${process.env.PORT || 4500}!`);

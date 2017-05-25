@@ -54,6 +54,9 @@ typings/
 # Yarn Integrity file
 .yarn-integrity
 
+# Yarn Lock
+yarn.lock
+
 # dotenv environment variables file
 .env
 
@@ -71,5 +74,6 @@ Session.vim
 # auto-generated tag files
 tags
 
-# Build dir
+# Build
 build
+.babelrc
