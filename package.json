@@ -9,7 +9,7 @@
     "build": "babel src/ -d build/",
     "clean": "rm -rf ./build",
     "build-watch": "babel src/ --watch -d build/",
-    "watch": "nodemon ./build/app.js"
+    "watch": "nodemon ./build/server.js"
   },
   "author": "Alejandro Ramirez <alex.ramirez@wizeline.com>",
   "license": "ISC",
@@ -18,7 +18,8 @@
     "express": "^4.15.3",
     "request": "^2.81.0",
     "request-promise": "^4.2.1",
-    "spotify-web-api-node": "^2.4.0"
+    "spotify-web-api-node": "^2.4.0",
+    "sqlite": "^2.8.0"
   },
   "repository": "git@github.com:a-rmz/sbotify.git",
   "devDependencies": {
