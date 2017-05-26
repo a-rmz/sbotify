@@ -1,0 +1,18 @@
+{
+  "dev": {
+    "driver": "sqlite3",
+    "filename": "./credentials.sqlite3"
+  },
+
+  "test": {
+    "driver": "sqlite3",
+    "filename": ":memory:"
+  },
+
+  "prod": {
+    "driver": "sqlite3",
+    "filename": ":memory:"
+  },
+
+  "sql-file" : true
+}

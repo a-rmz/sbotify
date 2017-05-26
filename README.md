@@ -13,7 +13,7 @@ A Slack app that allows you to easily share the new artists you discover, or tha
 Assuming that you already have a Slack app ready for this:
 - Create a Slash command `/spotify` (or however you wanna call it) that redirects you to
   - `https://youraddress.com/incoming`
-- Create an Interactive Message integration that redirects you to 
+- Create an Interactive Message integration that redirects you to
   - `https://youraddress.com/postback`
   - That is used for the buttons that will share the content
 - Activate the bot user
@@ -30,6 +30,9 @@ Almost there. Now you have to install all the dependencies. Depending on your pa
 
 ## Running it
 `node src/app.js`
+
+## To create and run the database migrations
+`[ yarn | npm ] run migrate up`
 
 --------
 Developed with <3
