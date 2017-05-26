@@ -107,7 +107,6 @@ router.post('/postback', (req, res) => {
 
   SlackCredentialModel.retrieve(payload.team.id)
     .then(credential => {
-      console.log(credential);
       rp({
         method: 'GET',
         uri: 'https://slack.com/api/chat.postMessage',
