@@ -114,6 +114,7 @@ router.post('/postback', (req, res) => {
           token: credential.accessToken,
           channel: payload.channel.id,
           text: text,
+          as_user: false,
           attachments: attachment
         }
       })
