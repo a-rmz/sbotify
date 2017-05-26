@@ -3,6 +3,9 @@
 const rp = require('request-promise');
 const router = require('express').Router();
 
+const SlackCredentialModel = require('../models/SlackCredentialModel');
+const SlackCredential = require('../schemas/SlackCredential');
+
 const SongSearch = require('../models/SongSearch');
 const SongTemplate = require('../templates/slack/SongTemplate');
 
@@ -102,24 +105,27 @@ router.post('/postback', (req, res) => {
   const text: string = value.text;
   const attachment: string = JSON.stringify(attachments);
 
-  rp({
-    method: 'GET',
-    uri: 'https://slack.com/api/chat.postMessage',
-    qs: {
-      token: process.env.SLACK_BOT_TOKEN,
-      channel: payload.channel.id,
-      text: text,
-      attachments: attachment
-    }
-  })
-  .catch(err => console.log(err));
+  SlackCredentialModel.retrieve(payload.team.id)
+    .then(credential => {
+      console.log(credential);
+      rp({
+        method: 'GET',
+        uri: 'https://slack.com/api/chat.postMessage',
+        qs: {
+          token: credential.accessToken,
+          channel: payload.channel.id,
+          text: text,
+          attachments: attachment
+        }
+      })
+      .catch(err => console.log(err));
+    });
 
 });
 
 router.get('/auth', (req, res) => {
   const state: string = req.query.state;
   const code: string = req.query.code;
-  console.log(process.env.SLACK_CLIENT_SECRET);
 
   rp({
     method: 'GET',
@@ -132,17 +138,21 @@ router.get('/auth', (req, res) => {
     }
   })
     .then(response => {
-      console.log(response);
-      if (response.ok) {
-        const accessToken: string = response.access_token;
-        const teamName: string = response.team_name;
-        const teamId: string = response.team_id;
-        const botUserId: string = response.bot.user_id;
-        const botAccessToken: string = response.bot.bot_access_token;
+      const credentialResponse = JSON.parse(response);
+      if (credentialResponse.ok) {
+        const credential = new SlackCredential();
+
+        credential.accessToken = credentialResponse.access_token;
+        credential.teamName = credentialResponse.team_name;
+        credential.teamId = credentialResponse.team_id;
+        credential.botUserId = credentialResponse.bot.bot_user_id;
+        credential.botAccessToken = credentialResponse.bot.bot_access_token;
+
+        SlackCredentialModel.save(credential);
+        res.redirect('https://a-rmz.github.io');
       }
     });
 
-  res.sendStatus(200);
 });
 
 module.exports = router;
