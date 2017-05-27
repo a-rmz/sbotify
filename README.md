@@ -12,7 +12,7 @@ You might be wondering: what will this app do with my great Slack team? Well, fe
 * A bot user (`@sbotify`) will be added.
 
 # Support
-If you have any question or concern, send me an email armzprz+sbotify+support@gmail.com.
+If you have any question or concern, send me an [email](mailto:armzprz+sbotify+support@gmail.com).
 
 # Privacy Policy
 This project is just made for fun. The only data kept is the id, name and token of your team, so we can provide you the best experience.
