@@ -10,7 +10,7 @@ class SlackCredentialModel {
     sqlite.open(dbConfig.dbPath)
     .then(a => {
       sqlite.run(
-        `INSERT INTO ${dbConfig.slack.dbTable}(team_id, team_name, access_token, bot_user_id, bot_access_token)
+        `REPLACE INTO ${dbConfig.slack.dbTable}(team_id, team_name, access_token, bot_user_id, bot_access_token)
         VALUES("${cred.teamId}", "${cred.teamName}", "${cred.accessToken}", "${cred.botUserId}", "${cred.botAccessToken}");`
       )
       .catch(reason => console.log(reason))
