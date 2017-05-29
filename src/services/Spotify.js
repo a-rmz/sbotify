@@ -1,24 +1,19 @@
 /* @flow */
 
-const SpotifyWebApi = require('spotify-web-api-node');
+const spotifyAPI = require('../lib/spotifyAPI');
 
 const Song = require('../schemas/Song');
 const Artist = require('../schemas/Artist');
 const Album = require('../schemas/Album');
 
-const api = new SpotifyWebApi({
-  clientId: process.env.CLIENT_ID,
-  clientSecret: process.env.CLIENT_SECRET,
-});
-
 class Spotify {
 
   // Props
-  api: SpotifyWebApi
+  api: any
 
   // Methods
   constructor() {
-    this.api = api;
+    this.api = spotifyAPI;
   }
 
 /**
@@ -29,7 +24,7 @@ class Spotify {
  * @return {Promise<[Song]>}  A promise resolving to an array of songs
  */
   _searchSong(keyword: string, limit: number) {
-    return api.searchTracks(keyword, {limit: limit})
+    return this.api.searchTracks(keyword, {limit: limit})
     .then(data => {
       const { items } = data.body.tracks;
 
@@ -52,7 +47,7 @@ class Spotify {
  * @return {Promise<[Artist]>}  A promise resolving to an array of artists
  */
   _searchArtist(keyword: string, limit: number) {
-    return api.searchArtists(keyword, {limit: limit})
+    return this.api.searchArtists(keyword, {limit: limit})
     .then(data => {
       const { items } = data.body.artists;
 
@@ -76,7 +71,7 @@ class Spotify {
  * @return {Promise<[Album]>}  A promise resolving to an array of albums
  */
   _searchAlbum(keyword: string, limit: number) {
-    return api.searchAlbums(keyword, {limit: limit})
+    return this.api.searchAlbums(keyword, {limit: limit})
     .then(data => {
       const { items } = data.body.albums;
 
