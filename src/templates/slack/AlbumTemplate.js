@@ -18,7 +18,7 @@ class AlbumTemplate {
     return albumCard;
   }
 
-  static getAlbumCardArray(albums: Album[]): ResponseTemplate {
+  static getAlbumCardArray(albums: Album[], username: string): CardTemplate[] {
     const cards: CardTemplate[] = albums.map(album => {
       const card: CardTemplate = AlbumTemplate.getBasicAlbumCard(album);
 
@@ -28,8 +28,11 @@ class AlbumTemplate {
 
       const callbackCard: CardTemplate[] = AlbumTemplate.getBasicAlbumCard(album).toArray();
 
+      const callbackMessage: string = (username) ?
+        `@${username} wants you to check out this album!\n${album.url}` :
+        'Check this out!\n';
       const callbackResponse = new ResponseTemplate(
-        `Check this out!\n${album.url}`,
+        callbackMessage,
         callbackCard
       );
       card.addButton(`share_${albumHash}`, 'Share!', callbackResponse.toString());
@@ -37,10 +40,7 @@ class AlbumTemplate {
       return card;
     });
 
-    const responseText: string = (cards.length > 0) ?
-        'Okay, this is what I found:' :
-        'I\'m sorry, I didn\'t find anything. ☹️';
-    return new ResponseTemplate(responseText, cards);
+    return cards;
   }
 
 }

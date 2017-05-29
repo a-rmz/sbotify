@@ -23,7 +23,7 @@ class ArtistTemplate {
     return artistCard;
   }
 
-  static getArtistCardArray(artists: Artist[]): ResponseTemplate {
+  static getArtistCardArray(artists: Artist[], username: string): CardTemplate[] {
     const cards: CardTemplate[] = artists.map(artist => {
       const card: CardTemplate = ArtistTemplate.getBasicArtistCard(artist);
 
@@ -33,8 +33,11 @@ class ArtistTemplate {
 
       const callbackCard: CardTemplate[] = ArtistTemplate.getBasicArtistCard(artist).toArray();
 
+      const callbackMessage: string = (username) ?
+        `@${username} wants you to check out this artist!\n${artist.url}` :
+        'Check this out!\n';
       const callbackResponse = new ResponseTemplate(
-        `Check this out!\n${artist.url}`,
+        callbackMessage,
         callbackCard
       );
       card.addButton(`share_${artistHash}`, 'Share!', callbackResponse.toString());
@@ -42,10 +45,7 @@ class ArtistTemplate {
       return card;
     });
 
-    const responseText: string = (cards.length > 0) ?
-        'Okay, this is what I found:' :
-        'I\'m sorry, I didn\'t find anything. ☹️';
-    return new ResponseTemplate(responseText, cards);
+    return cards;
   }
 
 }
