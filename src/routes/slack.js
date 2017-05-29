@@ -15,6 +15,7 @@ const ArtistTemplate = require('../templates/slack/ArtistTemplate');
 const AlbumSearch = require('../models/AlbumSearch');
 const AlbumTemplate = require('../templates/slack/AlbumTemplate');
 
+const CardTemplate = require('../templates/slack/CardTemplate');
 const ResponseTemplate = require('../templates/slack/ResponseTemplate');
 
 const validParams = ['song', 'artist', 'album'];
@@ -26,7 +27,7 @@ const validParams = ['song', 'artist', 'album'];
  */
 router.post('/incoming', (req, res, next) => {
   const { body } = req;
-  const { text } = body;
+  const { text, user_name } = body;
 
   const tokens: [string] = text.split(' ');
   const param: string = tokens[0];
@@ -37,6 +38,7 @@ router.post('/incoming', (req, res, next) => {
     return;
   }
 
+  req.user = user_name;
   req.param = param;
   req.keyword = keyword;
   next();
@@ -51,6 +53,7 @@ router.post('/incoming', (req, res) => {
 
   const param: string = req.param;
   const keyword: string = req.keyword;
+  const username: string = req.user;
 
   let result: Promise<*>;
   switch (param) {
@@ -58,27 +61,31 @@ router.post('/incoming', (req, res) => {
       const songSearch = new SongSearch(keyword, 5);
       songSearch.search();
       const songs = songSearch.getResults();
-      result = songs.then(resultSongs => SongTemplate.getSongCardArray(resultSongs));
+      result = songs.then(resultSongs => SongTemplate.getSongCardArray(resultSongs, username));
       break;
     case 'artist':
       const artistSearch = new ArtistSearch(keyword, 5);
       artistSearch.search();
       const artists = artistSearch.getResults();
-      result = artists.then(resultArtists => ArtistTemplate.getArtistCardArray(resultArtists));
+      result = artists.then(resultArtists => ArtistTemplate.getArtistCardArray(resultArtists, username));
       break;
     case 'album':
       const albumSearch = new AlbumSearch(keyword, 5);
       albumSearch.search();
       const albums = albumSearch.getResults();
-      result = albums.then(resultAlbums => AlbumTemplate.getAlbumCardArray(resultAlbums));
+      result = albums.then(resultAlbums => AlbumTemplate.getAlbumCardArray(resultAlbums, username));
       break;
     default:
       result = new Promise((resolve, reject) => reject());
-
   }
 
   result
-    .then(response => {
+    .then((cards: CardTemplate[]) => {
+      const responseText: string = (cards.length > 0) ?
+        'Okay, this is what I found:' :
+        'I\'m sorry, I didn\'t find anything. ☹️';
+
+      const response: ResponseTemplate = new ResponseTemplate(responseText, cards);
       res.status(200).send(response);
       return;
     })
@@ -115,6 +122,7 @@ router.post('/postback', (req, res) => {
           channel: payload.channel.id,
           text: text,
           as_user: false,
+          link_names: true,
           attachments: attachment
         }
       })
