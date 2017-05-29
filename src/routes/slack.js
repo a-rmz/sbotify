@@ -111,7 +111,7 @@ router.post('/postback', (req, res) => {
         method: 'GET',
         uri: 'https://slack.com/api/chat.postMessage',
         qs: {
-          token: credential.accessToken,
+          token: credential.botAccessToken,
           channel: payload.channel.id,
           text: text,
           as_user: false,
