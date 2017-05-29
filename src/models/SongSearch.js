@@ -1,5 +1,7 @@
 /* @flow */
 
+const logger = require('../lib/logger');
+
 const services: {} = require('../services');
 const Song = require('../schemas/Song');
 
@@ -25,14 +27,14 @@ class SongSearch {
     let promises: Promise<Song[]>[] = [];
 
     for (const service: string in services) {
-      const currentService = new services[service]();
+      const currentService = services[service];
       promises.push(currentService._searchSong(this.name, this.limit));
     }
 
     return Promise.all(promises)
       .then(result => [].concat.apply([], result))
       .catch(reason => {
-        console.log(reason);
+        logger.error(reason);
         return [];
       });
   }

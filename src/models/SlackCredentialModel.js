@@ -1,5 +1,7 @@
 /* @flow */
 
+const logger = require('../lib/logger');
+
 const sqlite = require('sqlite');
 const dbConfig = require('../config/db');
 const SlackCredential = require('../schemas/SlackCredential');
@@ -13,7 +15,7 @@ class SlackCredentialModel {
         `REPLACE INTO ${dbConfig.slack.dbTable}(team_id, team_name, access_token, bot_user_id, bot_access_token)
         VALUES("${cred.teamId}", "${cred.teamName}", "${cred.accessToken}", "${cred.botUserId}", "${cred.botAccessToken}");`
       )
-      .catch(reason => console.log(reason))
+      .catch(reason => logger.error(reason))
       .then(a => {
         sqlite.close();
       });
@@ -37,7 +39,7 @@ class SlackCredentialModel {
           return credential;
         })
         .catch(reason => {
-          console.log(reason);
+          logger.error(reason);
           return new SlackCredential();
         })
         .then(creds => {

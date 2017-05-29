@@ -1,5 +1,7 @@
 /* @flow */
 
+const logger = require('../lib/logger');
+
 const rp = require('request-promise');
 const router = require('express').Router();
 
@@ -90,11 +92,17 @@ router.post('/incoming', (req, res) => {
       return;
     })
     .catch(reason => {
-      console.log(reason);
+      logger.error(reason);
       res.status(200).send('Sorry, something went terribly wrong. ☹️');
       return;
     });
 
+  logger.info({
+    action: 'search',
+    platform: 'Slack',
+    command: param,
+    term: keyword
+  });
 
 });
 
@@ -126,8 +134,14 @@ router.post('/postback', (req, res) => {
           attachments: attachment
         }
       })
-      .catch(err => console.log(err));
+      .catch(reason => logger.error(reason));
     });
+
+  logger.info({
+    action: 'post',
+    Platform: 'Slack',
+    attachment: attachments
+  });
 
 });
 
