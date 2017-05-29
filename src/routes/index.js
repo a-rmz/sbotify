@@ -1,7 +1,6 @@
 /* @flow */
 
 const router = require('express').Router();
-const expressListRoutes = require('express-list-routes');
 
 // Load all the routes
 require('fs').readdirSync(__dirname + '/').forEach(file => {

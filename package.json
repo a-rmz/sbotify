@@ -10,6 +10,7 @@
     "clean": "rm -rf ./build",
     "build-watch": "babel src/ --watch -d build/",
     "watch": "nodemon ./build/server.js",
+    "lint": "eslint . --ext .js --cache",
     "migrate": "node_modules/db-migrate/bin/db-migrate"
   },
   "author": "Alejandro Ramirez <alex.ramirez@wizeline.com>",
@@ -20,7 +21,8 @@
     "request": "^2.81.0",
     "request-promise": "^4.2.1",
     "spotify-web-api-node": "^2.4.0",
-    "sqlite": "^2.8.0"
+    "sqlite": "^2.8.0",
+    "winston": "^2.3.1"
   },
   "repository": "git@github.com:a-rmz/sbotify.git",
   "devDependencies": {
@@ -36,7 +38,6 @@
     "eslint-plugin-babel": "^4.1.1",
     "eslint-plugin-flowtype": "^2.32.1",
     "eslint-plugin-react": "^7.0.0",
-    "express-list-routes": "^0.1.4",
     "jest": "^20.0.3"
   },
   "jest": {
