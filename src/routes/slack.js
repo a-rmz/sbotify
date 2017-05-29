@@ -150,6 +150,9 @@ router.get('/auth', (req, res) => {
 
         SlackCredentialModel.save(credential);
         res.redirect('https://a-rmz.github.io');
+      } else {
+        res.status(502).send(`Something went terribly wrong! 🔥
+          Please shoot me an email to armzprz@gmail.com to let me know about this. :)`);
       }
     });
 
