@@ -76,7 +76,6 @@ tags
 
 # Build
 build
-.babelrc
 
 # Database
 *.sqlite3
