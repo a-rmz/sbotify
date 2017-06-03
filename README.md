@@ -1,9 +1,19 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.4/sweetalert2.common.min.js"></script>
+
 <script>
   const hash = window.location.hash;
   if (hash === '#success') {
-    console.log('Yay!');
+    swal({
+      title: "Success",
+      text: "Thanks for installing Sbotify in your team!",
+      type: "success"
+    });
   } else if (hash === '#failure') {
-    console.log('Nay. :(');
+    swal({
+      title: "Oops!",
+      text: "I'm sorry, something went wrong… please try again, and if this persists, send me an email to me@a-rmz.io",
+      type: "error"
+    });
   }
 </script>
 
