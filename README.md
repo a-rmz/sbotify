@@ -1,3 +1,7 @@
+<script>
+  console.log('Hello, world!')
+</script>
+
 # Sbotify!
 An easy way to share music with your team. 🎶
 
