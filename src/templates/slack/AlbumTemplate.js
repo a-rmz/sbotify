@@ -30,7 +30,7 @@ class AlbumTemplate {
 
       const callbackMessage: string = (username) ?
         `@${username} wants you to check out this album!\n${album.url}` :
-        'Check this out!\n';
+        `Check this out!\n${album.url}`;
       const callbackResponse = new ResponseTemplate(
         callbackMessage,
         callbackCard

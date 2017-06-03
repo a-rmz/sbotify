@@ -22,6 +22,18 @@ const ResponseTemplate = require('../templates/slack/ResponseTemplate');
 
 const validParams = ['song', 'artist', 'album'];
 
+const getTokens = text => text.split(' ');
+const getSearchParameter = text => getTokens(text)[0];
+const isValidSearchParameter = text => validParams.includes(getSearchParameter(text));
+const isValidKeyword = text => buildKeyword(text);
+const buildKeyword = text => getTokens(text).slice(1).join(' ');
+
+const decorateRequest = (req: any, text: string, username: string): any => {
+  req.username = username;
+  req.searchParam = getSearchParameter(text);
+  req.keyword = buildKeyword(text);
+};
+
 /**
  * Middleware layer that verifies that both parameter and keyword
  * are present in the command
@@ -29,23 +41,16 @@ const validParams = ['song', 'artist', 'album'];
  */
 router.post('/incoming', (req, res, next) => {
   const { body } = req;
-  const { text, user_name } = body;
+  const text: string = body.text;
+  const username: string = body.user_name;
 
-  const tokens: [string] = text.split(' ');
-  const param: string = tokens[0];
-  const keyword: string = tokens.slice(1).join(' ');
-
-  if (validParams.indexOf(param) === -1 || keyword.length <= 0) {
+  if (!isValidSearchParameter(text) || !isValidKeyword(text)) {
     res.status(200).send('Please enter a valid command!');
-    return;
   }
 
-  req.user = user_name;
-  req.param = param;
-  req.keyword = keyword;
+  decorateRequest(req, text, username);
   next();
 });
-
 /**
  * Main router endpoint.
  * Makes the call to the controller and returns the message
@@ -53,28 +58,25 @@ router.post('/incoming', (req, res, next) => {
  */
 router.post('/incoming', (req, res) => {
 
-  const param: string = req.param;
+  const param: string = req.searchParam;
   const keyword: string = req.keyword;
-  const username: string = req.user;
+  const username: string = req.username;
 
-  let result: Promise<*>;
+  let result: Promise<*[]>;
   switch (param) {
     case 'song':
-      const songSearch = new SongSearch(keyword, 5);
-      songSearch.search();
-      const songs = songSearch.getResults();
+      const songSearch: SongSearch = new SongSearch(keyword, 5);
+      const songs: Promise<*[]> = songSearch.search();
       result = songs.then(resultSongs => SongTemplate.getSongCardArray(resultSongs, username));
       break;
     case 'artist':
-      const artistSearch = new ArtistSearch(keyword, 5);
-      artistSearch.search();
-      const artists = artistSearch.getResults();
+      const artistSearch: ArtistSearch = new ArtistSearch(keyword, 5);
+      const artists: Promise<*[]> = artistSearch.search();
       result = artists.then(resultArtists => ArtistTemplate.getArtistCardArray(resultArtists, username));
       break;
     case 'album':
-      const albumSearch = new AlbumSearch(keyword, 5);
-      albumSearch.search();
-      const albums = albumSearch.getResults();
+      const albumSearch: AlbumSearch = new AlbumSearch(keyword, 5);
+      const albums: Promise<*[]> = albumSearch.search();
       result = albums.then(resultAlbums => AlbumTemplate.getAlbumCardArray(resultAlbums, username));
       break;
     default:
@@ -126,7 +128,7 @@ router.post('/postback', (req, res) => {
         method: 'GET',
         uri: 'https://slack.com/api/chat.postMessage',
         qs: {
-          token: credential.botAccessToken,
+          token: credential.accessToken,
           channel: payload.channel.id,
           text: text,
           as_user: false,
@@ -134,14 +136,24 @@ router.post('/postback', (req, res) => {
           attachments: attachment
         }
       })
-      .catch(reason => logger.error(reason));
+      .then(res => {
+        const response = JSON.parse(res);
+        if (response.ok) {
+          logger.info({
+            action: 'post',
+            Platform: 'Slack',
+            attachment: attachments
+          });
+        } else {
+          throw new Error(response);
+        }
+      })
+      .catch(reason => logger.error({
+        reason,
+        action: 'post',
+        Platform: 'Slack'
+      }));
     });
-
-  logger.info({
-    action: 'post',
-    Platform: 'Slack',
-    attachment: attachments
-  });
 
 });
 
@@ -153,28 +165,32 @@ router.get('/auth', (req, res) => {
     method: 'GET',
     uri: 'https://slack.com/api/oauth.access',
     qs: {
+      code,
       client_id: process.env.SLACK_CLIENT_ID,
       client_secret: process.env.SLACK_CLIENT_SECRET,
-      code,
       redirect_uri: process.env.SLACK_REDIRECT_URI
     }
   })
     .then(response => {
       const credentialResponse = JSON.parse(response);
       if (credentialResponse.ok) {
-        const credential = new SlackCredential();
-
-        credential.accessToken = credentialResponse.access_token;
-        credential.teamName = credentialResponse.team_name;
-        credential.teamId = credentialResponse.team_id;
-        credential.botUserId = credentialResponse.bot.bot_user_id;
-        credential.botAccessToken = credentialResponse.bot.bot_access_token;
+        const credential = new SlackCredential({
+          accessToken: credentialResponse.access_token,
+          teamName: credentialResponse.team_name,
+          teamId: credentialResponse.team_id,
+          botUserId: credentialResponse.bot.bot_user_id,
+          botAccessToken: credentialResponse.bot.bot_access_token
+        });
 
         SlackCredentialModel.save(credential);
-        res.redirect('https://a-rmz.github.io');
+        res.redirect('https://a-rmz.io/sbotify#success');
       } else {
-        res.status(502).send(`Something went terribly wrong! 🔥
-          Please shoot me an email to armzprz@gmail.com to let me know about this. :)`);
+        logger.error({
+          credentialResponse,
+          action: 'auth',
+          Platform: 'Slack'
+        });
+        res.redirect('https://a-rmz.io/sbotify#failure');
       }
     });
 

@@ -1,43 +1,25 @@
 /* @flow */
 
-const logger = require('../lib/logger');
-
 const services: {} = require('../services');
+
+const Search = require('./Search');
 const Album = require('../schemas/Album');
 
-class AlbumSearch {
-  name: string
-  limit: number
-  _result: Promise<Album[]>;
+class AlbumSearch extends Search {
 
-  constructor(name: string, limit: number)  {
-    this.name = name;
-    this.limit = limit;
-  }
-
-  search(): void {
-    this._result = this._getAlbums();
-  }
-
-  getResults(): Promise<Album[]> {
-    return this._result;
-  }
-
-  _getAlbums(): Promise<Album[]> {
+  search(): Promise<Album[]> {
     let promises: Promise<Album[]>[] = [];
 
     for (const service: string in services) {
       const currentService = services[service];
-      promises.push(currentService._searchAlbum(this.name, this.limit));
+      promises.push(currentService._searchAlbum(this.term, this.limit));
     }
 
-    return Promise.all(promises)
-      .then(result => [].concat.apply([], result))
-      .catch(reason => {
-        logger.error(reason);
-        return [];
-      });
+    this._result = this.setResult(promises);
+
+    return this._result;
   }
+
 }
 
 module.exports = AlbumSearch;

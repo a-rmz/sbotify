@@ -31,7 +31,7 @@ class SongTemplate {
 
       const callbackMessage: string = (username) ?
         `@${username} wants you to check out this song!\n${song.url}` :
-        'Check this out!\n';
+        'Check this out!\n${song.url}';
       const callbackResponse = new ResponseTemplate(
         callbackMessage,
         callbackCard

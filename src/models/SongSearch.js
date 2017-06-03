@@ -1,43 +1,25 @@
 /* @flow */
 
-const logger = require('../lib/logger');
-
 const services: {} = require('../services');
+
+const Search = require('./Search');
 const Song = require('../schemas/Song');
 
-class SongSearch {
-  name: string
-  limit: number
-  _result: Promise<Song[]>;
+class SongSearch extends Search {
 
-  constructor(name: string, limit: number)  {
-    this.name = name;
-    this.limit = limit;
-  }
-
-  search(): void {
-    this._result = this._getSongs();
-  }
-
-  getResults(): Promise<Song[]> {
-    return this._result;
-  }
-
-  _getSongs(): Promise<Song[]> {
+  search(): Promise<Song[]> {
     let promises: Promise<Song[]>[] = [];
 
     for (const service: string in services) {
       const currentService = services[service];
-      promises.push(currentService._searchSong(this.name, this.limit));
+      promises.push(currentService._searchSong(this.term, this.limit));
     }
 
-    return Promise.all(promises)
-      .then(result => [].concat.apply([], result))
-      .catch(reason => {
-        logger.error(reason);
-        return [];
-      });
+    this._result = this.setResult(promises);
+
+    return this._result;
   }
+
 }
 
 module.exports = SongSearch;

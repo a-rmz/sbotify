@@ -1,12 +1,13 @@
 /* @flow */
 
-// Load `*.js` under current directory as properties
-//  i.e., `User.js` will become `exports['User']` or `exports.User`
-require('fs').readdirSync(__dirname + '/').forEach(file => {
-  if (file.match(/\.js$/) !== null && file !== 'index.js') {
-    const name: string = file.replace('.js', '');
-    const path: string = `./${file}`;
-    const Service = require(path);
+const logger = require('../lib/logger');
+const { parseIndex } = require('../lib/utils');
+
+const loadServices = () => {
+  parseIndex(__dirname, (name: string, Service: any) => {
+    logger.debug(`Mounting service ${name}`);
     module.exports[name] = new Service();
-  }
-});
+  });
+};
+
+loadServices();

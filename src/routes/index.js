@@ -1,16 +1,23 @@
 /* @flow */
 
-const router = require('express').Router();
+const Router = require('express').Router;
 
-// Load all the routes
-require('fs').readdirSync(__dirname + '/').forEach(file => {
-  if (file.match(/\.js$/) !== null && file !== 'index.js') {
-    const name: string = file.replace('.js', '');
-    const path: string = `./${file}`;
-    const route = require(path);
+const logger = require('../lib/logger');
+const { parseIndex } = require('../lib/utils');
 
+const addRoutesToRouter = router => {
+  parseIndex(__dirname, (name: string, route: any) => {
+    logger.debug(`Mounting route /${name}`);
     router.use(`/${name}`, route);
-  }
-});
+  });
+};
 
-module.exports = router;
+let router: Router;
+const getRouter = () => {
+  if (router) {return router;}
+  router = Router();
+  addRoutesToRouter(router);
+  return router;
+};
+
+module.exports = getRouter();

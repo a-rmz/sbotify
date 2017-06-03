@@ -29,12 +29,13 @@ class SlackCredentialModel {
           `SELECT * FROM ${dbConfig.slack.dbTable} WHERE team_id="${teamId}"`
         )
         .then(credentialResponse => {
-          const credential: SlackCredential = new SlackCredential();
-          credential.accessToken = credentialResponse.access_token;
-          credential.teamName = credentialResponse.team_name;
-          credential.teamId = credentialResponse.team_id;
-          credential.botUserId = credentialResponse.bot_user_id;
-          credential.botAccessToken = credentialResponse.bot_access_token;
+          const credential: SlackCredential = new SlackCredential({
+            accessToken: credentialResponse.access_token,
+            teamName: credentialResponse.team_name,
+            teamId: credentialResponse.team_id,
+            botUserId: credentialResponse.bot_user_id,
+            botAccessToken: credentialResponse.bot_access_token
+          });
 
           return credential;
         })

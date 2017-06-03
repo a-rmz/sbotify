@@ -4,21 +4,28 @@ const EventEmitter = require('events');
 const SpotifyWebApi = require('spotify-web-api-node');
 
 const logger = require('./logger');
-const eventEmitter = new EventEmitter();
+
+const TOKEN_TTL = 3600;
 
 class SpotifyAPI extends SpotifyWebApi {
 
   api: SpotifyWebApi;
   tokenTTL: number;
+  eventEmitter: EventEmitter;
 
   constructor() {
     super({
       clientId: process.env.SPOTIFY_CLIENT_ID,
       clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
     });
+    this.eventEmitter = new EventEmitter();
+    this.tokenTTL = TOKEN_TTL;
+
+    // First time token refresh
     this.refreshToken();
 
-    this.tokenTTL = 3600;
+    this.setRefreshTokenListener();
+    this.startRefreshTokenService();
   }
 
   refreshToken() {
@@ -26,7 +33,7 @@ class SpotifyAPI extends SpotifyWebApi {
     this.clientCredentialsGrant()
       .then(data => {
         logger.debug(`The new token is ${data.body.access_token}`);
-        this.tokenTTL = Number(data.body['expires_in']);
+        this.tokenTTL = Number(data.body['expires_in']) || TOKEN_TTL;
         this.setAccessToken(data.body['access_token']);
       })
       .catch(err => {
@@ -34,18 +41,21 @@ class SpotifyAPI extends SpotifyWebApi {
       });
   }
 
-  setRefreshTokenService() {
+  startRefreshTokenService() {
     const interval: number = this.tokenTTL * 1000;
     logger.debug(`Token refresh service running every ${interval / 1000} seconds`);
     setInterval(() => {
-      eventEmitter.emit('token_refresh');
+      this.eventEmitter.emit('token_refresh');
     }, interval);
+  }
+
+  setRefreshTokenListener() {
+    this.eventEmitter.on('token_refresh', () => {
+      this.refreshToken();
+    });
   }
 }
 
 const api: SpotifyAPI = new SpotifyAPI();
-eventEmitter.on('token_refresh', () => {
-  api.refreshToken();
-});
 
 module.exports = api;

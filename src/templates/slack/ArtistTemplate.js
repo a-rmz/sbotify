@@ -35,7 +35,7 @@ class ArtistTemplate {
 
       const callbackMessage: string = (username) ?
         `@${username} wants you to check out this artist!\n${artist.url}` :
-        'Check this out!\n';
+        `Check this out!\n${artist.url}`;
       const callbackResponse = new ResponseTemplate(
         callbackMessage,
         callbackCard
