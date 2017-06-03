@@ -1,5 +1,10 @@
 <script>
-  console.log('Hello, world!')
+  const hash = location.hash;
+  if (hash === 'success') {
+    console.log('Yay!');
+  } else if (hash === 'failure') {
+    console.log('Nay. :(');
+  }
 </script>
 
 # Sbotify!
