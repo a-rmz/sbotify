@@ -1,6 +1,0 @@
-{
-  "extends": "fbjs",
-  "rules": {
-    "comma-dangle": 0
-  }
-}
