@@ -21,16 +21,12 @@ describe('AlbumSearch', () => {
   });
 
   describe('#getAlbums', () => {
-    beforeEach(() => {
-      albumSearch.search();
-    });
-
     it('should return a promise', () => {
-      expect(albumSearch.getResults()).toBeInstanceOf(Promise);
+      expect(albumSearch.search()).toBeInstanceOf(Promise);
     });
 
     it('should resolve to an array of Albums', () => {
-      return albumSearch.getResults()
+      return albumSearch.search()
         .then(res => expect(res).toBeArrayOf(Album));
     });
   });

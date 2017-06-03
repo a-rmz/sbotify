@@ -8,9 +8,6 @@ const bodyParser = require('body-parser');
 const logger = require('./lib/logger');
 const routes = require('./routes');
 
-const spotifyAPI = require('./lib/spotifyAPI');
-spotifyAPI.setRefreshTokenService();
-
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());

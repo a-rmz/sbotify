@@ -1,6 +1,7 @@
 /* @flow */
 
 const logger = require('../lib/logger');
+const { flattenArray } = require('../lib/utils');
 
 const services: {} = require('../services');
 const Artist = require('../schemas/Artist');
@@ -32,7 +33,7 @@ class ArtistSearch {
     }
 
     return Promise.all(promises)
-      .then(result => [].concat.apply([], result))
+      .then(result => flattenArray(result))
       .catch(reason => {
         logger.error(reason);
         return [];
