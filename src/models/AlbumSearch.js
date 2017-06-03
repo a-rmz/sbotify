@@ -1,7 +1,6 @@
 /* @flow */
 
 const services: {} = require('../services');
-const logger = require('../lib/logger');
 
 const Search = require('./Search');
 const Album = require('../schemas/Album');

@@ -62,23 +62,21 @@ router.post('/incoming', (req, res) => {
   const keyword: string = req.keyword;
   const username: string = req.username;
 
-  let result: Promise<*>;
+  let result: Promise<*[]>;
   switch (param) {
     case 'song':
-      const songSearch = new SongSearch(keyword, 5);
-      songSearch.search();
-      const songs = songSearch.getResults();
+      const songSearch: SongSearch = new SongSearch(keyword, 5);
+      const songs: Promise<*[]> = songSearch.search();
       result = songs.then(resultSongs => SongTemplate.getSongCardArray(resultSongs, username));
       break;
     case 'artist':
-      const artistSearch = new ArtistSearch(keyword, 5);
-      artistSearch.search();
-      const artists = artistSearch.getResults();
+      const artistSearch: ArtistSearch = new ArtistSearch(keyword, 5);
+      const artists: Promise<*[]> = artistSearch.search();
       result = artists.then(resultArtists => ArtistTemplate.getArtistCardArray(resultArtists, username));
       break;
     case 'album':
-      const albumSearch = new AlbumSearch(keyword, 5);
-      const albums = albumSearch.search();
+      const albumSearch: AlbumSearch = new AlbumSearch(keyword, 5);
+      const albums: Promise<*[]> = albumSearch.search();
       result = albums.then(resultAlbums => AlbumTemplate.getAlbumCardArray(resultAlbums, username));
       break;
     default:
@@ -187,8 +185,7 @@ router.get('/auth', (req, res) => {
         SlackCredentialModel.save(credential);
         res.redirect('https://a-rmz.io/sbotify#success');
       } else {
-        res.status(502).send(`Something went terribly wrong! 🔥
-          Please shoot me an email to me@a-rmz.io to let me know about this. :)`);
+        res.redirect('https://a-rmz.io/sbotify#failure');
       }
     });
 
