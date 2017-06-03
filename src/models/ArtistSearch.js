@@ -12,7 +12,7 @@ class ArtistSearch extends Search {
 
     for (const service: string in services) {
       const currentService = services[service];
-      promises.push(currentService._searchArtist(this.term, this.limit));
+      promises.push(currentService.searchArtist(this.term, this.limit));
     }
 
     this._result = this.setResult(promises);

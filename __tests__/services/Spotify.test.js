@@ -25,35 +25,35 @@ describe('Spotify Service', () => {
     });
   });
 
-  describe('#_searchSong', () => {
+  describe('#searchSong', () => {
     it('should return a promise', () => {
-      expect(service._searchSong('', 5)).toBeInstanceOf(Promise);
+      expect(service.searchSong('', 5)).toBeInstanceOf(Promise);
     });
 
     it('should resolve to an array of Songs', () => {
-      return service._searchSong('', 5)
+      return service.searchSong('', 5)
         .then(res => expect(res).toBeArrayOf(Song));
     });
   });
 
-  describe('#_searchArtist', () => {
+  describe('#searchArtist', () => {
     it('should return a promise', () => {
-      expect(service._searchArtist('', 5)).toBeInstanceOf(Promise);
+      expect(service.searchArtist('', 5)).toBeInstanceOf(Promise);
     });
 
     it('should resolve to an array of Artist', () => {
-      return service._searchArtist('', 5)
+      return service.searchArtist('', 5)
         .then(res => expect(res).toBeArrayOf(Artist));
     });
   });
 
-  describe('#_searchAlbum', () => {
+  describe('#searchAlbum', () => {
     it('should return a promise', () => {
-      expect(service._searchAlbum('', 5)).toBeInstanceOf(Promise);
+      expect(service.searchAlbum('', 5)).toBeInstanceOf(Promise);
     });
 
     it('should resolve to an array of Artist', () => {
-      return service._searchAlbum('', 5)
+      return service.searchAlbum('', 5)
         .then(res => expect(res).toBeArrayOf(Album));
     });
   });
