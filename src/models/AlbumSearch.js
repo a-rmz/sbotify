@@ -12,7 +12,7 @@ class AlbumSearch extends Search {
 
     for (const service: string in services) {
       const currentService = services[service];
-      promises.push(currentService._searchAlbum(this.term, this.limit));
+      promises.push(currentService.searchAlbum(this.term, this.limit));
     }
 
     this._result = this.setResult(promises);

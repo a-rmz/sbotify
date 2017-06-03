@@ -46,6 +46,7 @@ router.post('/incoming', (req, res, next) => {
 
   if (!isValidSearchParameter(text) || !isValidKeyword(text)) {
     res.status(200).send('Please enter a valid command!');
+    return;
   }
 
   decorateRequest(req, text, username);
