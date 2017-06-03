@@ -185,6 +185,11 @@ router.get('/auth', (req, res) => {
         SlackCredentialModel.save(credential);
         res.redirect('https://a-rmz.io/sbotify#success');
       } else {
+        logger.error({
+          credentialResponse,
+          action: 'auth',
+          Platform: 'Slack'
+        });
         res.redirect('https://a-rmz.io/sbotify#failure');
       }
     });
