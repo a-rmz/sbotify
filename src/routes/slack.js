@@ -21,11 +21,25 @@ const CardTemplate = require('../templates/slack/CardTemplate');
 const ResponseTemplate = require('../templates/slack/ResponseTemplate');
 
 const validParams = ['song', 'artist', 'album'];
+const helpParams = ['help', 'halp'];
 
 const getTokens = text => text.split(' ');
 const getSearchParameter = text => getTokens(text)[0];
-const isValidSearchParameter = text => validParams.includes(getSearchParameter(text));
+const isValidSearchParameter = text => validParams.includes(getSearchParameter(text.toLowerCase()));
 const isValidKeyword = text => buildKeyword(text);
+const isHelp = text => helpParams.includes(text.toLowerCase());
+const getHelpMessage = () =>
+`You can do the following:
+\`\`\`/sbotify artist name_of_the_artist
+/sbotify album name_of_the_album
+/sbotify song name_of_the_song\`\`\`
+
+You can also do more complex searchs, for example:
+If you want to search for a song of a specific artist, you can do:
+
+\`\`\`/sbotify song name_of_the_song name_of_the_artist\`\`\`
+
+If you need further help, go to http://a-rmz.io/sbotify`;
 const buildKeyword = text => getTokens(text).slice(1).join(' ');
 
 const decorateRequest = (req: any, text: string, username: string): any => {
@@ -44,7 +58,11 @@ router.post('/incoming', (req, res, next) => {
   const text: string = body.text;
   const username: string = body.user_name;
 
-  if (!isValidSearchParameter(text) || !isValidKeyword(text)) {
+  if (isHelp(text)) {
+    const helpMessage = getHelpMessage();
+    res.status(200).send(helpMessage);
+    return;
+  } else if (!isValidSearchParameter(text) || !isValidKeyword(text)) {
     res.status(200).send('Please enter a valid command!');
     return;
   }
