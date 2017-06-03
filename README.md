@@ -1,5 +1,5 @@
 <script>
-  const hash = location.hash;
+  const hash = window.location.hash;
   if (hash === 'success') {
     console.log('Yay!');
   } else if (hash === 'failure') {
