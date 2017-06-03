@@ -1,8 +1,8 @@
 <script>
   const hash = window.location.hash;
-  if (hash === 'success') {
+  if (hash === '#success') {
     console.log('Yay!');
-  } else if (hash === 'failure') {
+  } else if (hash === '#failure') {
     console.log('Nay. :(');
   }
 </script>
