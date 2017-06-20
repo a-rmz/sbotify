@@ -1,5 +1,5 @@
 
-const logfile = process.env.LOGFILE || (process.env.NODE_ENV !== 'production') ? 'sbotify-logs.log' : '~/.sbotify-logs.log';
+const logfile = process.env.LOGFILE || 'sbotify-logs.log';
 
 module.exports = {
   console: {
