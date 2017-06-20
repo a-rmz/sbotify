@@ -17,6 +17,10 @@ app.use('/', (req, res, next) => {
   next();
 });
 
+app.get('/_health', (req, res, next) => {
+  res.send('OK');
+});
+
 app.use('/', routes);
 
 app.listen(process.env.PORT || 4500, () => {

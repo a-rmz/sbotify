@@ -192,6 +192,8 @@ router.get('/auth', (req, res) => {
   })
     .then(response => {
       const credentialResponse = JSON.parse(response);
+      let result = 'failure';
+
       if (credentialResponse.ok) {
         const credential = new SlackCredential({
           accessToken: credentialResponse.access_token,
@@ -200,17 +202,16 @@ router.get('/auth', (req, res) => {
           botUserId: credentialResponse.bot.bot_user_id,
           botAccessToken: credentialResponse.bot.bot_access_token
         });
-
+        result = 'success';
         SlackCredentialModel.save(credential);
-        res.redirect('https://a-rmz.io/sbotify#success');
       } else {
         logger.error({
           credentialResponse,
           action: 'auth',
           Platform: 'Slack'
         });
-        res.redirect('https://a-rmz.io/sbotify#failure');
       }
+      res.redirect(`${process.env.BASE_URL}/sbotify#${result}`);
     });
 
 });
