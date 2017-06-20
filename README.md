@@ -5,7 +5,8 @@
 
 A Slack app that allows you to easily share the new artists you discover, or that cool song you want your teammates to listen to!
 
-![Sbotify logo](http://a-rmz.io/sbotify/sbotify.png)
+![Sbotify logo](https://user-images.githubusercontent.com/15201480/27359886-dd78f546-55e3-11e7-8482-421750fff96b.png)
+
 
 ## Getting Started
 
