@@ -1,18 +1,18 @@
 {
   "dev": {
-    "driver": "sqlite3",
-    "filename": "./db/dev.credentials.sqlite3"
+    "driver": "mysql",
+    "host": {"ENV": "DB_HOST"},
+    "port": {"ENV": "DB_PORT"},
+    "user": {"ENV": "DB_USER"},
+    "password": {"ENV": "DB_PASS"},
+    "database": {"ENV": "DB_NAME"}
   },
-
-  "test": {
-    "driver": "sqlite3",
-    "filename": "./db/test.credentials.sqlite3"
-  },
-
   "prod": {
-    "driver": "sqlite3",
-    "filename": "./db/credentials.sqlite3"
-  },
-
-  "sql-file" : true
+    "driver": "mysql",
+    "host": {"ENV": "DB_HOST"},
+    "port": {"ENV": "DB_PORT"},
+    "user": {"ENV": "DB_USER"},
+    "password": {"ENV": "DB_PASS"},
+    "database": {"ENV": "DB_NAME"}
+  }
 }

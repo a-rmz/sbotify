@@ -1,9 +1,12 @@
 
-const path = (process.env.NODE_ENV !== 'production') ? 'credentials.sqlite3' : './db/credentials.sqlite3';
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').load();
+}
 
 module.exports = {
-  dbPath: path,
-  slack: {
-    dbTable: 'SlackCredentials'
-  }
+  host: `${process.env.DB_HOST}`,
+  port: `${process.env.DB_PORT}`,
+  database: `${process.env.DB_NAME}`,
+  user: `${process.env.DB_USER}`,
+  password: `${process.env.DB_PASS}`,
 };
