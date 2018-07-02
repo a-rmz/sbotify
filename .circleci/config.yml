@@ -1,0 +1,113 @@
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
+version: 2
+
+# Download and cache dependencies
+restore_deps: &restore_deps
+  restore_cache:
+    keys:
+    - v1-dependency-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
+    - v1-dependency-cache-{{ .Branch }}-{{ checksum "package.json" }}
+    - v1-dependency-cache-{{ .Branch }}-
+    - v1-dependency-cache-
+    - v1-dependencies-
+
+install_deps: &install_deps
+  run:
+    name: Install dependencies
+    command: yarn
+
+save_deps: &save_deps
+  save_cache:
+    key: - v1-dependency-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
+    paths:
+      - node_modules
+
+restore_src: &restore_src
+  restore_cache:
+    keys:
+      - v1-source-cache-{{ .Branch }}-{{ .Revision }}
+      - v1-source-cache-{{ .Branch }}-
+      - v1-source-cache-
+
+save_src: &save_src
+  save_cache:
+    key: v1-source-cache-{{ .Branch }}-{{ .Revision }}
+    paths:
+      - ".git"
+
+jobs:
+  dependency_install:
+    docker:
+      - image: circleci/node:9.11
+
+    steps:
+      - *restore_src
+      - checkout
+      - *save_src
+      - *restore_deps
+      - *install_deps
+      - *save_deps
+  
+  build:
+    docker:
+      - image: circleci/node:9.11
+    steps:
+      - *restore_src
+      - checkout
+      - *restore_deps
+      - run: yarn build
+
+  lint:
+    docker:
+      - image: circleci/node:9.11
+    steps:
+      - *restore_src
+      - checkout
+      - *restore_deps
+      - run: yarn lint
+
+  test:
+    docker:
+      - image: circleci/node:9.11
+    steps:
+      - *restore_src
+      - checkout
+      - *restore_deps
+      - run: yarn test
+
+  type_check:
+    docker:
+      - image: circleci/node:9.11
+    steps:
+      - *restore_src
+      - checkout
+      - *restore_deps
+      - run: yarn flow
+
+
+workflows:
+  version: 2
+  continuous_integration:
+    jobs:
+      - dependency_install
+
+      - lint:
+          requires:
+            - dependency_install
+
+      - type_check:
+          requires:
+            - dependency_install
+
+      - test:
+          requires:
+            - dependency_install
+
+      - build:
+          requires:
+            - lint
+            - type_check
+            - test
