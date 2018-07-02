@@ -1,5 +1,10 @@
 {
-  "extends": "fbjs",
+  "extends": [
+    "plugin:flowtype/recommended"
+  ],
+  "plugins": [
+    "flowtype"
+  ],
   "rules": {
     "comma-dangle": 0,
     "no-console": 2
