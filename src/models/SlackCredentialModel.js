@@ -3,7 +3,6 @@
 const logger = require('../lib/logger');
 
 const db = require('../lib/db');
-const { table } = require('../config/db');
 const SlackCredential = require('../schemas/SlackCredential');
 
 class SlackCredentialModel {

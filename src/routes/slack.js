@@ -39,7 +39,7 @@ If you want to search for a song of a specific artist, you can do:
 
 \`\`\`/sbotify song name_of_the_song name_of_the_artist\`\`\`
 
-If you need further help, go to ${process.env.BASE_URL}`;
+If you need further help, go to ${process.env.BASE_URL || 'https://a-rmz.me/'}`;
 const buildKeyword = text => getTokens(text).slice(1).join(' ');
 
 const decorateRequest = (req: any, text: string, username: string): any => {
@@ -177,7 +177,6 @@ router.post('/postback', (req, res) => {
 });
 
 router.get('/auth', (req, res) => {
-  const state: string = req.query.state;
   const code: string = req.query.code;
 
   rp({
@@ -205,7 +204,7 @@ router.get('/auth', (req, res) => {
           Platform: 'Slack'
         });
       }
-      res.redirect(`${process.env.BASE_URL}#${result}`);
+      res.redirect(`${process.env.BASE_URL || 'https://a-rmz.me/'}#${result}`);
     })
     .catch(logger.error);
 

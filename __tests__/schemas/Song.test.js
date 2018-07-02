@@ -1,3 +1,4 @@
+// @flow
 
 const Song = require('../../src/schemas/Song');
 

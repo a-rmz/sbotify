@@ -12,6 +12,6 @@ const getConnection = () => {
     .catch(err => {
       logger.error('Error while connecting to database', err);
     });
-}
+};
 
 module.exports = getConnection();

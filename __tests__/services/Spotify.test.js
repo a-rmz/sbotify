@@ -1,3 +1,4 @@
+// @flow
 
 jest.mock('spotify-web-api-node');
 const Spotify = require('../../src/services/Spotify');

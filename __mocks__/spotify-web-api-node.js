@@ -1,41 +1,45 @@
+// @flow
 
-const spotifyWebApiMock = jest.genMockFromModule('spotify-web-api-node');
 const songResponse = require('./songResponse');
 const artistResponse = require('./artistResponse');
 const albumResponse = require('./albumResponse');
 
 class SpotifyMock {
 
-  constructor(options) {
+  clientId: string;
+  clientSecret: string;
+  token: string;
+
+  constructor(options: Object) {
     this.clientId = options.clientId || '';
     this.clientSecret = options.clientSecret || '';
   }
 
-  clientCredentialsGrant() {
+  clientCredentialsGrant(): Promise<Object> {
     return Promise.resolve({
       body: {
         access_token: 'xoxo-access-token',
       },
-    })
+    });
   }
 
-  setAccessToken(token: String) {
+  setAccessToken(token: string): void {
     this.token = token;
   }
 
-  searchTracks(keyword: String, options: {}) {
+  searchTracks(keyword: string, options: {}): Promise<Object> {
     return new Promise((resolve, reject) => {
       resolve(songResponse);
     });
   }
 
-  searchArtists(keyword: String, options: {}) {
+  searchArtists(keyword: string, options: {}): Promise<Object> {
     return new Promise((resolve, reject) => {
       resolve(artistResponse);
     });
   }
 
-  searchAlbums(keyword: String, options: {}) {
+  searchAlbums(keyword: string, options: {}): Promise<Object> {
     return new Promise((resolve, reject) => {
       resolve(albumResponse);
     });

@@ -7,7 +7,7 @@
 class _Field {
   title: ?string;
   value: ?string;
-  short: ?bool;
+  short: ?boolean;
 }
 
 class _Action {
@@ -55,7 +55,7 @@ class CardTemplate {
   callback_text: ?string;
   callback_id: ?string;
 
-  addField(title: string, value: string, short: bool = false): void {
+  addField(title: string, value: string, short: boolean = false): void {
     const field = new _Field();
     field.title = title;
     field.value = value;

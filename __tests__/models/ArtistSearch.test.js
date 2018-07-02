@@ -1,3 +1,4 @@
+// @flow
 
 const ArtistSearch = require('../../src/models/ArtistSearch');
 const Artist = require('../../src/schemas/Artist');
