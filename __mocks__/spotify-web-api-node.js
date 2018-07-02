@@ -11,6 +11,18 @@ class SpotifyMock {
     this.clientSecret = options.clientSecret || '';
   }
 
+  clientCredentialsGrant() {
+    return Promise.resolve({
+      body: {
+        access_token: 'xoxo-access-token',
+      },
+    })
+  }
+
+  setAccessToken(token: String) {
+    this.token = token;
+  }
+
   searchTracks(keyword: String, options: {}) {
     return new Promise((resolve, reject) => {
       resolve(songResponse);
