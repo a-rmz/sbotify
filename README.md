@@ -16,6 +16,10 @@ Now, if you want to run your own instance, this is the place to be.
 
 ### Prerequisites
 
+#### Docker and Docker Compose
+- Follow the instructions on the [Docker](https://www.docker.com/community-edition#/download) website and install the version corresponding to your OS
+- Install [Docker Compose](https://docs.docker.com/compose/install/)
+
 #### Spotify
 - Go to [Spotify developer's site](https://developer.spotify.com/) and create a new app.
 - Keep the tab open, you'll need the Client ID and Secret soon
@@ -46,7 +50,16 @@ Now, going back to your environment, copy and rename the `.env.example` to `.env
 NODE_ENV -> current environment (development, testing, production)
 LOGFILE -> name of the file that will be used to log
 
+MYSQL_ROOT_PASSWORD -> password for the MySQL root user
+
+DB_HOST -> host for the credentials database
+DB_PORT -> port for the credentials database
+DB_NAME -> name of the credentials database to be used
+DB_USER -> user to access the credentials database
+DB_PASS -> password for the db user
+
 BASE_URL -> url of the website (in case you're not using authentication, you can leave it blank -but don't delete it)
+PORT -> port for the app to run
 
 SPOTIFY_CLIENT_ID -> Taken from the Spotify app you created
 SPOTIFY_CLIENT_SECRET -> idem
@@ -86,7 +99,8 @@ $ yarn build
 
 and then run the app
 ```
-$ [npm | yarn] start
+$ docker-compose build
+$ docker-compose up
 ```
 
 You should see some debug dump in the console, something like this:
@@ -102,10 +116,26 @@ $ debug: The new token is XXXXXXX
 
 ## Running the tests
 
-Tests are kind of outdated, but you still can run them with
+Run:
 
 ```
 $ [npm | yarn] test
+```
+
+## Running the linter
+
+Run:
+
+```
+$ [npm | yarn] lint
+```
+
+## Running the type checking
+
+Run:
+
+```
+$ [npm | yarn] flow
 ```
 
 ## Deployment
