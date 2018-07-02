@@ -8,11 +8,11 @@ class SlackCredential {
   botAccessToken: string;
 
   constructor(credentialResponse: any) {
-    this.accessToken = credentialResponse.accessToken;
-    this.teamName = credentialResponse.teamName;
-    this.teamId = credentialResponse.teamId;
-    this.botUserId = credentialResponse.botUserId;
-    this.botAccessToken = credentialResponse.botAccessToken;
+    this.accessToken = credentialResponse.access_token;
+    this.teamName = credentialResponse.team_name;
+    this.teamId = credentialResponse.team_id;
+    this.botUserId = credentialResponse.bot_user_id;
+    this.botAccessToken = credentialResponse.bot_access_token;
   }
 }
 

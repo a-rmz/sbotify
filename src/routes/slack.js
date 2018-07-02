@@ -195,13 +195,7 @@ router.get('/auth', (req, res) => {
       let result = 'failure';
 
       if (credentialResponse.ok) {
-        const credential = new SlackCredential({
-          accessToken: credentialResponse.access_token,
-          teamName: credentialResponse.team_name,
-          teamId: credentialResponse.team_id,
-          botUserId: credentialResponse.bot.bot_user_id,
-          botAccessToken: credentialResponse.bot.bot_access_token
-        });
+        const credential = new SlackCredential(credentialResponse);
         result = 'success';
         SlackCredentialModel.save(credential);
       } else {
