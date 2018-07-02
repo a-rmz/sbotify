@@ -21,7 +21,7 @@ install_deps: &install_deps
 
 save_deps: &save_deps
   save_cache:
-    key: - v1-dependency-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
+    key: v1-dependency-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
     paths:
       - node_modules
 
