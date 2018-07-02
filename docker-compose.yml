@@ -19,7 +19,7 @@ services:
     command: [
       "./lib/wait-for-it.sh",
       "${DB_HOST}:${DB_PORT}", "--timeout=10", "--",
-      "yarn", "watch"
+      "./lib/entrypoint-dev.sh"
     ]
     environment:
       NODE_ENV: "develop"
