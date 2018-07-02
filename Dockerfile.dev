@@ -1,0 +1,7 @@
+FROM node:9.11
+
+RUN mkdir -p /sbotify
+
+WORKDIR /sbotify
+
+EXPOSE 80

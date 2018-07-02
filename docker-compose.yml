@@ -1,0 +1,38 @@
+version: '3'
+services:
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_USER: "${DB_USER}"
+      MYSQL_PASSWORD: "${DB_PASS}"
+      MYSQL_DATABASE: "${DB_NAME}"
+    # Only for dev purposes,
+    # should be removed for production
+    ports:
+      - "3008:${DB_PORT}"
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    command: [
+      "./lib/wait-for-it.sh",
+      "${DB_HOST}:${DB_PORT}", "--timeout=10", "--",
+      "yarn", "watch"
+    ]
+    environment:
+      NODE_ENV: "develop"
+      LOGFILE: "${LOGFILE}"
+      BASE_URL: "${BASE_URL}"
+      SPOTIFY_CLIENT_ID: "${SPOTIFY_CLIENT_ID}"
+      SPOTIFY_CLIENT_SECRET: "${SPOTIFY_CLIENT_SECRET}"
+      SLACK_CLIENT_ID: "${SLACK_CLIENT_ID}"
+      SLACK_CLIENT_SECRET: "${SLACK_CLIENT_SECRET}"
+      SLACK_REDIRECT_URI: "${SLACK_REDIRECT_URI}"
+    volumes:
+      - .:/sbotify
+    ports:
+      - "3040:${PORT}"
+
+
