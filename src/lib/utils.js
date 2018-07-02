@@ -2,7 +2,7 @@
 
 const fs = require('fs');
 
-const flattenArray = (array: any[]) => [].concat.apply([], array);
+const flattenArray = (array: any[]): any[] => [].concat.apply([], array);
 
 const getCurrentDirectoryFilenames = (dir: string) => fs.readdirSync(dir + '/');
 const isJavascriptFile = (file: string) => file.match(/\.js$/) !== null;

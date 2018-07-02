@@ -11,6 +11,7 @@
     "build-watch": "babel src/ --watch -d build/",
     "watch": "./node_modules/.bin/nodemon ./build/server.js",
     "lint": "./node_modules/.bin/eslint . --ext .js --cache",
+    "flow": "./node_modules/.bin/flow",
     "migrate": "node_modules/db-migrate/bin/db-migrate",
     "migrate-dev": "node_modules/db-migrate/bin/db-migrate --env dev up",
     "migrate-prod": "node_modules/db-migrate/bin/db-migrate --env prod up"
