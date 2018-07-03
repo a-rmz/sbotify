@@ -92,22 +92,37 @@ workflows:
   version: 2
   continuous_integration:
     jobs:
-      - dependency_install
+      - dependency_install:
+          filters:
+            branches:
+              ignore: gh-pages
 
       - lint:
           requires:
             - dependency_install
+          filters:
+            branches:
+              ignore: gh-pages
 
       - type_check:
           requires:
             - dependency_install
+          filters:
+            branches:
+              ignore: gh-pages
 
       - test:
           requires:
             - dependency_install
+          filters:
+            branches:
+              ignore: gh-pages
 
       - build:
           requires:
             - lint
             - type_check
             - test
+          filters:
+            branches:
+              ignore: gh-pages
