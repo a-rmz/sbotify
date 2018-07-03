@@ -24,7 +24,7 @@ An easy way to share music with your team. 🎶
 ![Sbotify logo](./sbotify.png)
 
 ## Add it to slack!
-<a href="https://slack.com/oauth/authorize?&scope=commands,bot,chat:write:bot&client_id=187076757827.188860129170&redirect_uri=https://sbotify.a-rmz.io/slack/auth"><img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" /></a>
+<a href="https://slack.com/oauth/authorize?client_id=187076757827.188860129170&scope=commands,bot,chat:write:bot"><img alt="Add to Slack" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" width="139" height="40"></a>
 
 Ez-pz, right?
 
