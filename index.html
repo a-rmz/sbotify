@@ -1,0 +1,122 @@
+<!doctype <!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>sbotify</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" media="screen" href="assets/style.css" />
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <style>   
+    body {
+      font-family: 'Source Code Pro', monospace;
+      font-weight: 300;
+    }
+    main {
+      margin: 20px;
+      padding: 20px;
+    }
+  </style>
+  <script>
+    document.addEventListener("DOMContentLoaded", function(event) {
+      const hash = window.location.hash;
+      if (hash === "#success") {
+        swal(
+          "Success",
+          "Thanks for installing Sbotify in your team!",
+          "success"
+        );
+        window.location.hash = "";
+      } else if (hash === "#failure") {
+        swal(
+          "Oops!",
+          "I'm sorry, something went wrong… please try again, and if this persists, send me an email to me@a-rmz.io",
+          "error"
+        );
+        window.location.hash = "";
+      }
+    });
+  </script>
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="assets/favicon/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+</head>
+<body>
+  <header>
+    <nav>
+      <ul>
+        <a href="#what">what happens to my team</a>
+        <a href="#how">how to use it</a>
+        <a href="#support">support</a>
+        <a href="#privacy">privacy policy</a>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <section class="vertical-align">
+      <img src="assets/sbotify.png" alt="sbotify logo" class="logo responsive">
+      <h1>Sbotify</h1>
+    </section>
+    <a href="https://slack.com/oauth/authorize?client_id=187076757827.188860129170&scope=commands,bot,chat:write:bot">
+      <img alt="Add to Slack" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" width="139" height="40">
+    </a>
+    <section class="margin-bottom">
+      <p>An easy way to share music with your team. 🎶</p>
+      <p>Have you ever tried sharing music with your colleagues? It's a pain, right? Go to the music app, search for that awesome song you discovered last night, tap, tap, tap, share, OOPS! You sent it to the wrong channel. Well, not anymore! Welcome <b>Sbotify</b>, an easy way to share music with your team.</p>
+    </section>
+    <section class="vertical-align">
+      <img src="assets/artist.png" alt="sbotify assets" class="fixed-width margin-bottom shadow responsive">
+      <img src="assets/song.png" alt="sbotify assets" class="fixed-width margin-bottom shadow responsive">
+    </section>
+    <section class="introduction">
+      <h1 id="what">what will it do to my team?</h1>
+      <p>
+        You might be wondering: what will this mighty wonderful app do with my great Slack team? Well, fear no more, because this is what will happen.
+      </p>
+      <ul>
+        <li>A slash command will be added.
+          <li>You can call the app by doing <code>/sbotify</code>.</li>
+        </li>
+        <li>A bot user (<code>@sbotify</code>) will be added (he's not very talkative).</li>
+      </ul>
+    </section>
+    <section id="how">
+      <h1>how do I use it?</h1>
+      <p>
+        You can search for a <b>song</b>, an <b>artist</b>, or an <b>album</b>, by simply calling:
+      </p>
+      <code class="block">
+        /sbotify song name-of-the-song<br>
+        /sbotify artist name-of-the-artist<br>
+        /sbotify album name-of-the-album<br>
+      </code>
+      <p>
+        That's it. That's the most basic usage.
+
+        You can also perform more complex queries, like adding the artist or the album after the song name, like this:
+      </p>
+      <code>
+        /sbotify song name-of-the-song name-of-the-artist name-of-the-album
+      </code>
+      <p>
+        This will get you more accurate results, or more specific, in case you're searching for a common term.
+      </p>
+    </section>
+    <section id="support">
+      <h1>support</h1>
+      <p>
+        If you have any question or concern, send me an <a href="mailto:support+armzprz@gmail.com">email</a>.
+      </p>
+    </section>
+    <section id="privacy">
+      <h1>privacy policy</h1>
+      <p>
+        This project is just made for fun. The only data kept is the id, name and token of your team, which is needed for the app to work. Otherwise, we don't store any other data, nor is it public.
+      </p>
+    </section>
+  </main>
+  <footer>
+    <p>developed in 🇲🇽 with love by <a href="https://a-rmz.me">Alejandro Ramirez</a></p>
+  </footer>
+</body>
+</html>

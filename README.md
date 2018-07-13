@@ -1,23 +1,3 @@
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.4/sweetalert2.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.4/sweetalert2.min.css">
-
-<script>
-  const hash = window.location.hash;
-  if (hash === '#success') {
-    swal(
-      "Success",
-      "Thanks for installing Sbotify in your team!",
-      "success"
-    );
-  } else if (hash === '#failure') {
-    swal(
-      "Oops!",
-      "I'm sorry, something went wrong… please try again, and if this persists, send me an email to me@a-rmz.io",
-      "error"
-    );
-  }
-</script>
-
 # Sbotify!
 An easy way to share music with your team. 🎶
 
@@ -53,7 +33,7 @@ This will get you more accurate results, or more specific, in case you're search
 ----------
 
 # Support
-If you have any question or concern, send me an [email](mailto:me+sbotify+support@a-rmz.io).
+If you have any question or concern, send me an [email](mailto:support+armzprz@gmail.com).
 
 # Privacy Policy
 This project is just made for fun. The only data kept is the id, name and token of your team, which is needed for the app to work. Otherwise, we don't store any other data, nor is it public.
